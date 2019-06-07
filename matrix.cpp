@@ -4,8 +4,9 @@
 using namespace std;
 using namespace std::chrono;
 
-const int MAX_N = 10000000;
-int A[MAX_N][MAX_N];
+// Set up global variable. (Method 1)
+//const int MAX_N = 10000000;
+//int A[MAX_N][MAX_N];
 
 int main(int argc, char ** argv)
 {
@@ -13,22 +14,25 @@ int main(int argc, char ** argv)
     cout << "Please provide a number!" << '\n';
   else
   {
-    double N = stod(argv[1]);
+    int N = stod(argv[1]);
 
     // Initialize matrices.
-    //double A[N][N], B[N][N], C[N][N];
-    double** A = new double*[N];
+    int** A = new int*[N];
     for (int i = 0; i < N; i++) {
-      A[i] = new double[N];
+      A[i] = new int[N];
     }
+    int** B = new int*[N];
     for (int i = 0; i < N; i++) {
-      delete [] A[i];
+      B[i] = new int[N];
     }
-    delete [] A;
+    int** C = new int*[N];
+    for (int i = 0; i < N; i++) {
+      C[i] = new int[N];
+    }
 
-    for (double i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
     {
-      for (double j = 0; j < N; j++)
+      for (int j = 0; j < N; j++)
       {
         A[i][j] = i * N + j;
         B[i][j] = j * N + i;
@@ -38,13 +42,13 @@ int main(int argc, char ** argv)
 
 
     high_resolution_clock::time_point begin = high_resolution_clock::now();
-    double sum = 0;
-    for (double i = 0; i < N; i++) // Rows
+    int sum = 0;
+    for (int i = 0; i < N; i++) // Rows
     {
-      for (double j = 0; j < N; j++) // Cols
+      for (int j = 0; j < N; j++) // Cols
       {
-        double cSum = 0;
-        for (double k = 0; k < N; k++)
+        int cSum = 0;
+        for (int k = 0; k < N; k++)
         {
           cSum += A[i][k] * B[k][j];
         }
@@ -54,6 +58,12 @@ int main(int argc, char ** argv)
     }
     high_resolution_clock::time_point end = high_resolution_clock::now();
     auto duration = duration_cast<nanoseconds>( end - begin ).count();
+
+    // Delete memory.
+    for (int i = 0; i < N; i++) {
+      delete [] A[i];
+    }
+    delete [] A;
 
     cout << sum << endl;
     cout << "The function took " << duration << " nanoseconds." << '\n';
